@@ -59,7 +59,7 @@ If you wish this driver to be the default driver, change the `default` value in 
 'default' => env('PENNANT_STORE', 'session_and_database'),
 ```
 
-or put it our .env file
+or put it in your .env file
     
 ```
 PENNANT_STORE=session_and_database

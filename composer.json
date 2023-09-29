@@ -1,0 +1,57 @@
+{
+    "name": "aladler/laravel-pennant-session-and-db-driver",
+    "description": "A 'session & DB driver' for Laravel Pennant for feature flags pre and post user authentication.",
+    "license": "MIT",
+    "homepage": "https://github.com/AlAdler/LaravelPennantSessionAndDBDriver",
+    "keywords": ["laravel", "pennant", "feature", "flags"],
+    "autoload": {
+        "psr-4": {
+            "Aladler\\LaravelPennantSessionAndDbDriver\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alain Adler",
+            "email": "al@aladler.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "laravel/pennant": "^1.5"
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.19",
+        "orchestra/testbench": "^8.12",
+        "pestphp/pest-plugin-laravel": "^2.2",
+        "laravel/pint": "^1.13"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "test": [
+            "@php vendor/bin/pest"
+        ]
+    }
+}

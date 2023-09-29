@@ -1,0 +1,10 @@
+providers:
+  - Laravel\Pennant\PennantServiceProvider
+
+migrations:
+  - vendor/laravel/pennant/database/migrations
+
+seeders: []
+
+workbench:
+  install: true

@@ -26,7 +26,8 @@ beforeEach(function () {
             app()['db']->connection(),
             app()['events'],
             config(),
-            []
+            [],
+            app()['session']
         );
     });
 });

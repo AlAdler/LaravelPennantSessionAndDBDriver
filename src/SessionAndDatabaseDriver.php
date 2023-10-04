@@ -5,6 +5,7 @@ namespace Aladler\LaravelPennantSessionAndDbDriver;
 use Aladler\LaravelPennantSessionAndDbDriver\Contracts\UserThatHasPreRegisterFeatures;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Session\SessionManager;
 use Laravel\Pennant\Drivers\DatabaseDriver;
 use Laravel\Pennant\Feature;
 
@@ -12,17 +13,14 @@ class SessionAndDatabaseDriver extends DatabaseDriver
 {
     private const SESSION_KEY_NAME = 'features';
 
-    /**
-     * {@inheritDoc}
-     */
-    public function __construct(Connection $db, Dispatcher $events, $config, $featureStateResolvers)
+    protected SessionManager $session;
+
+    public function __construct(Connection $db, Dispatcher $events, $config, $featureStateResolvers, SessionManager $session)
     {
         parent::__construct($db, $events, $config, $featureStateResolvers);
+        $this->session = $session;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getAll($features): array
     {
         $results = [];
@@ -35,9 +33,6 @@ class SessionAndDatabaseDriver extends DatabaseDriver
         return $results;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function get($feature, $scope): mixed
     {
         if ($scope instanceof UserThatHasPreRegisterFeatures) {
@@ -51,9 +46,6 @@ class SessionAndDatabaseDriver extends DatabaseDriver
         return parent::get($feature, $scope);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function set($feature, $scope, $value): void
     {
         if ($scope === null) {
@@ -72,18 +64,12 @@ class SessionAndDatabaseDriver extends DatabaseDriver
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setForAllScopes($feature, $value): void
     {
         $this->setValueToSession($feature, $value);
         parent::setForAllScopes($feature, $value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function delete($feature, $scope): void
     {
         if (
@@ -100,13 +86,10 @@ class SessionAndDatabaseDriver extends DatabaseDriver
         parent::delete($feature, $scope);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function purge($features): void
     {
         if ($features === null) {
-            session()->forget(self::SESSION_KEY_NAME);
+            $this->session->forget(self::SESSION_KEY_NAME);
         } else {
             foreach ($features as $feature) {
                 $this->removeValueFromSession($feature);
@@ -119,7 +102,7 @@ class SessionAndDatabaseDriver extends DatabaseDriver
     {
         $features = $this->getFeaturesFromSession();
         unset($features[$feature]);
-        session()->put(self::SESSION_KEY_NAME, $features);
+        $this->session->put(self::SESSION_KEY_NAME, $features);
     }
 
     private function getValueFromSession(string $feature): mixed
@@ -134,14 +117,14 @@ class SessionAndDatabaseDriver extends DatabaseDriver
 
     private function getFeaturesFromSession(): array
     {
-        return session()->get(self::SESSION_KEY_NAME, []);
+        return $this->session->get(self::SESSION_KEY_NAME, []);
     }
 
     private function setValueToSession(string $feature, mixed $value): void
     {
         $features = $this->getFeaturesFromSession();
         $features[$feature] = $value;
-        session()->put(self::SESSION_KEY_NAME, $features);
+        $this->session->put(self::SESSION_KEY_NAME, $features);
     }
 
     private function getValueForUserScope(string $feature, UserThatHasPreRegisterFeatures $user): mixed

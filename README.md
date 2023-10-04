@@ -47,7 +47,8 @@ public function boot(): void
             app()['db']->connection(),
             app()['events'],
             config(),
-            []
+            [],
+            app()['session']
         );
     });
 }

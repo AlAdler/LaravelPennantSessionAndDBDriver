@@ -14,7 +14,7 @@ A 'session & DB driver' for Laravel Pennant for feature flags pre- and post-user
 
 - Laravel 10 or higher
 - PHP 8.1 or higher
-- [Pennant 1.5](https://laravel.com/docs/10.x/pennant) or higher
+- [Pennant 1.6](https://laravel.com/docs/10.x/pennant) or higher
 
 ## Installation
 

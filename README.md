@@ -44,7 +44,7 @@ public function boot(): void
 {
     Feature::extend('session_and_database', function (){
         return new SessionAndDatabaseDriver(
-            app()['db']->connection(),
+            app()['db'],
             app()['events'],
             config(),
             [],

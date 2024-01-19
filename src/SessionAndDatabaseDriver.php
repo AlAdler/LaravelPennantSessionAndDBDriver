@@ -3,8 +3,9 @@
 namespace Aladler\LaravelPennantSessionAndDbDriver;
 
 use Aladler\LaravelPennantSessionAndDbDriver\Contracts\UserThatHasPreRegisterFeatures;
+use Illuminate\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Connection;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Session\SessionManager;
 use Laravel\Pennant\Drivers\DatabaseDriver;
 use Laravel\Pennant\Feature;
@@ -15,9 +16,9 @@ class SessionAndDatabaseDriver extends DatabaseDriver
 
     protected SessionManager $session;
 
-    public function __construct(Connection $db, Dispatcher $events, $config, $featureStateResolvers, SessionManager $session)
+    public function __construct(DatabaseManager $db, Dispatcher $events, Repository $config, string $name, $featureStateResolvers, SessionManager $session)
     {
-        parent::__construct($db, $events, $config, $featureStateResolvers);
+        parent::__construct($db, $events, $config, $name, $featureStateResolvers);
         $this->session = $session;
     }
 
